@@ -108,6 +108,7 @@ public class NewActivity extends AnAction {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+        content = content.replace("$name", bigname);
         writetoFile(content, project.getBasePath() + "/app/src/main/res/layout",
                 layoutFile.getName().replace(".txt", smallname + ".xml"));
 
