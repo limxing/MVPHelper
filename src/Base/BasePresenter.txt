@@ -1,0 +1,8 @@
+package $packagename;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public class BasePresenter {
+}

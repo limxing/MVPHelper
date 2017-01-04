@@ -1,0 +1,18 @@
+package $packagename.$smallname;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public class $namePresenter implements $namePreInterface {
+    private $nameView $smallnameView;
+
+    public $namePresenter($nameView $smallnameView) {
+        this.$smallnameView = $smallnameView;
+    }
+
+    @Override
+    public void destory() {
+        $smallnameView = null;
+    }
+}

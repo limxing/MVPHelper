@@ -1,0 +1,15 @@
+package $packagename;
+
+import android.app.Application;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public class ProjectApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+    }
+}

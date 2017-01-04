@@ -1,0 +1,9 @@
+package $packagename.$smallname;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public interface $namePreInterface {
+     void destory();
+}

@@ -1,0 +1,40 @@
+package $packagename.$smallname;
+
+import android.content.Intent;
+import $packagename.BaseActivity;
+import $packagename.R;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public class $nameActivity extends BaseActivity implements $nameView {
+    private $namePresenter presenter;
+
+    @Override
+    protected void initData() {
+        presenter = new $namePresenter(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destory();
+        presenter = null;
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_$smallname;
+    }
+
+    @Override
+    protected void doReceive(Intent action) {
+
+    }
+}
