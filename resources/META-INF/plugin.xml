@@ -1,8 +1,8 @@
 <idea-plugin version="2">
-    <id>com.your.company.unique.plugin.id</id>
-    <name>Plugin display name here</name>
+    <id>me.leefeng.mvphelper</id>
+    <name>LeefengMVPHelper</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="leefengme@163.com" url="http://www.leefeng.me">Leefeng.Me</vendor>
 
     <description><![CDATA[
       Enter short description for your plugin here.<br>
@@ -41,8 +41,8 @@
         <!--</action>-->
 
         <!--<group id="MvpPlugin.SampleMenu" text="_MvpTools" description="tools">-->
-            <!--<add-to-group group-id="MainMenu" anchor="last"  />-->
-            <!--<action id="MvpPlugin.CreateFileAction" class="me.leefeng.AddActivity" text="CreateFiles" description="createfiles" />-->
+        <!--<add-to-group group-id="MainMenu" anchor="last"  />-->
+        <!--<action id="MvpPlugin.CreateFileAction" class="me.leefeng.AddActivity" text="CreateFiles" description="createfiles" />-->
         <!--</group>-->
 
         <action id="Leefeng.NewActivity" class="me.leefeng.NewActivity" text="NewActivity" description="NewActivity">
