@@ -232,14 +232,6 @@ public class NewActivity extends AnAction {
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(project.getBasePath() + "/app/src/main/AndroidManifest.xml");
-            NodeList list = doc.getElementsByTagName("application");
-            for (int i = 0; i < list.getLength(); i++) {
-                Node dog = list.item(i);
-                Element elem = (Element) dog;
-                System.out.println(elem.getTagName());
-            }
-
-
             NodeList dogList = doc.getElementsByTagName("manifest");
             for (int i = 0; i < dogList.getLength(); i++) {
                 Node dog = dogList.item(i);
