@@ -46,7 +46,6 @@ public class NewActivity extends AnAction {
         userName = map.get("USERNAME");// 获取用户名
 
         project = e.getData(PlatformDataKeys.PROJECT);
-        System.out.println("ＨＡＨＡ:" + file.getPath() + "==" + project.getBasePath());
         String name = Messages.showInputDialog(project, "起个名字，一定要吊炸天的名字！", "先想个名字",
                 Messages.getQuestionIcon());
         if (name == null || name.trim().length() == 0) {
@@ -225,7 +224,6 @@ public class NewActivity extends AnAction {
             int len = -1;
             while ((len = inStream.read(buffer)) != -1) {
                 outSteam.write(buffer, 0, len);
-//                System.out.println(new String(buffer));
             }
 
         } catch (IOException e) {
