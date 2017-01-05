@@ -11,9 +11,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -30,12 +32,15 @@ public class NewActivity extends AnAction {
 
     private Project project;
     private String packageName;
+    private String smallname;
+    private String bigname;
+    private String userName;
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         // TODO: insert action logic here
         Map<String, String> map = System.getenv();
-        String userName = map.get("USERNAME");// 获取用户名
+        userName = map.get("USERNAME");// 获取用户名
 
         project = e.getData(PlatformDataKeys.PROJECT);
         String name = Messages.showInputDialog(project, "起个名字，一定要吊炸天的名字！", "先想个名字",
@@ -46,74 +51,91 @@ public class NewActivity extends AnAction {
                     Messages.getQuestionIcon());
             return;
         }
-        String smallname = toUpperOrNot(name, false);
-        String bigname = toUpperOrNot(name, true);
-        packageName = readPackageName();
-        String s = new String(packageName).replace(".", "/");
-        String basePath = project.getBasePath() + "/app/src/main/java/" + s;
-        File baseActivity = new File(basePath + "/BaseActivity.java");
-
-        if (!baseActivity.exists()) {
-            File[] baseFiles = new File(this.getClass().getResource("/Base").getPath()).listFiles();
-            for (File file : baseFiles) {
-                InputStream inputStream;
-                String content = "";
-                try {
-                    inputStream = new FileInputStream(file);
-                    content = new String(readStream(inputStream));
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                content = content.replace("$packagename", packageName);
-                content = content.replace("$date", getNowDateShort());
-                content = content.replace("$author", userName);
-                writetoFile(content, basePath, file.getName().replace("txt", "java"));
-            }
-            manifast(".ProjectApplication", null);
-        }
-        File newFile = new File(basePath, name);
-        if (!newFile.exists()) {
-            newFile.mkdirs();
-        }
-
-        File[] baseFiles = new File(this.getClass().getResource("/Activity").getPath()).listFiles();
-        for (File file : baseFiles) {
-            InputStream inputStream;
-            String content = "";
-            try {
-                inputStream = new FileInputStream(file);
-                content = new String(readStream(inputStream));
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-            content = content.replace("$packagename", packageName);
-            content = content.replace("$date", getNowDateShort());
-            content = content.replace("$smallname", smallname);
-            content = content.replace("$name", bigname);
-            content = content.replace("$author", userName);
-            writetoFile(content, basePath + "/" + smallname, bigname + file.getName().replace("txt", "java"));
-        }
-        File layoutFile = new File(this.getClass().getResource("/Layout/activity_.txt").getPath());
-        InputStream inputStream;
-        String content = "";
+        smallname = toUpperOrNot(name, false);
+        bigname = toUpperOrNot(name, true);
         try {
-            inputStream = new FileInputStream(layoutFile);
-            content = new String(readStream(inputStream));
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        content = content.replace("$name", bigname);
-        writetoFile(content, project.getBasePath() + "/app/src/main/res/layout",
-                layoutFile.getName().replace(".txt", smallname + ".xml"));
+            packageName = readPackageName();
+            String s = new String(packageName).replace(".", "/");
+            String basePath = project.getBasePath() + "/app/src/main/java/" + s;
+            File baseActivity = new File(basePath + "/BaseActivity.java");
 
-        manifast(null, "." + smallname + "." + bigname + "Activity");
+            if (!baseActivity.exists()) {
+//                File[] baseFiles = new File(this.getClass().getResource("/Base").getFile()).listFiles();
+//                for (File file : baseFiles) {
+//                    InputStream inputStream;
+//                    String content = "";
+//                    try {
+//                        inputStream = new FileInputStream(file);
+//                        content = new String(readStream(inputStream));
+//                    } catch (FileNotFoundException e1) {
+//                        e1.printStackTrace();
+//                    } catch (Exception e1) {
+//                        e1.printStackTrace();
+//                    }
+//                    content = content.replace("$packagename", packageName);
+//                    content = content.replace("$date", getNowDateShort());
+//                    content = content.replace("$author", userName);
+//                    writetoFile(content, basePath, file.getName().replace("txt", "java"));
+//                }
+                /**
+                 * 创建基类
+                 */
+                creatFile("Base", "BaseActivity.txt", basePath, "");
+                creatFile("Base", "BasePresenter.txt", basePath, "");
+                creatFile("Base", "ProjectApplication.txt", basePath, "");
+                /**
+                 * 写入Manfast ProjectApplication
+                 */
+                manifast(".ProjectApplication", null);
+            }
+            File newFile = new File(basePath, name);
+            if (!newFile.exists()) {
+                newFile.mkdirs();
+            }
+
+            /**
+             * 创建四个MVP
+             */
+            creatFile("Activity", "Activity.txt", basePath + "/" + smallname, bigname);
+            creatFile("Activity", "View.txt", basePath + "/" + smallname, bigname);
+            creatFile("Activity", "Presenter.txt", basePath + "/" + smallname, bigname);
+            creatFile("Activity", "PreInterface.txt", basePath + "/" + smallname, bigname);
+
+/**
+ * 写入layout 资源文件
+ */
+            File layoutFile = new File(this.getClass().getResource("/Layout/activity_.txt").getFile());
+            String content = readFile("/Layout/activity_.txt");
+            content = content.replace("$name", bigname);
+            writetoFile(content, project.getBasePath() + "/app/src/main/res/layout",
+                    layoutFile.getName().replace(".txt", smallname + ".xml"));
+/**
+ * 写入Manfast
+ */
+            manifast(null, "." + smallname + "." + bigname + "Activity");
+        } catch (Exception ex) {
+            Messages.showInfoMessage(project, ex.toString(), "错误提示");
+        }
         Messages.showInfoMessage(project, "成功添加，请刷新列表", "提示");
+    }
+
+
+    /**
+     * 创建文件
+     *
+     * @param activity
+     * @param s
+     * @param toPath
+     */
+    private void creatFile(String activity, String s, String toPath, String firstName) {
+        String content = "";
+        content = readFile("/" + activity + "/" + s);
+        content = content.replace("$packagename", packageName);
+        content = content.replace("$date", getNowDateShort());
+        content = content.replace("$smallname", smallname);
+        content = content.replace("$name", bigname);
+        content = content.replace("$author", userName);
+        writetoFile(content, toPath, firstName + s.replace("txt", "java"));
     }
 
 
@@ -179,20 +201,19 @@ public class NewActivity extends AnAction {
         return dateString;
     }
 
-
-    private String ReadFile(String filename) {
+    /**
+     * 读取流
+     *
+     * @param filename /Activity/Activity.txt
+     * @return
+     */
+    private String readFile(String filename) {
         InputStream in = null;
-        in = this.getClass().getResourceAsStream("/Template/" + filename);
+        in = this.getClass().getResourceAsStream(filename);
         String content = "";
         try {
             content = new String(readStream(in));
         } catch (Exception e) {
-        } finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return content;
     }
@@ -227,22 +248,17 @@ public class NewActivity extends AnAction {
      *
      * @return
      */
-    private String readPackageName() {
+    private String readPackageName() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(project.getBasePath() + "/app/src/main/AndroidManifest.xml");
-            NodeList dogList = doc.getElementsByTagName("manifest");
-            for (int i = 0; i < dogList.getLength(); i++) {
-                Node dog = dogList.item(i);
-                Element elem = (Element) dog;
-                return elem.getAttribute("package");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(project.getBasePath() + "/app/src/main/AndroidManifest.xml");
+        NodeList dogList = doc.getElementsByTagName("manifest");
+        for (int i = 0; i < dogList.getLength(); i++) {
+            Node dog = dogList.item(i);
+            Element elem = (Element) dog;
+            return elem.getAttribute("package");
         }
+
         return "";
     }
 

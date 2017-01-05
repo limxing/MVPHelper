@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MVPHelper">
+    <output-path>$PROJECT_DIR$/MVPHelper</output-path>
+    <root id="archive" name="MVPHelper.jar">
+      <element id="module-output" name="Leefeng" />
+    </root>
+  </artifact>
+</component>
