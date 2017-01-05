@@ -2,9 +2,11 @@ package me.leefeng;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,12 +38,15 @@ public class NewActivity extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        VirtualFile file = DataKeys.VIRTUAL_FILE.getData(e.getDataContext());
+        String basePath = file.getPath();
 
         // TODO: insert action logic here
         Map<String, String> map = System.getenv();
         userName = map.get("USERNAME");// 获取用户名
 
         project = e.getData(PlatformDataKeys.PROJECT);
+        System.out.println("ＨＡＨＡ:" + file.getPath() + "==" + project.getBasePath());
         String name = Messages.showInputDialog(project, "起个名字，一定要吊炸天的名字！", "先想个名字",
                 Messages.getQuestionIcon());
         if (name == null || name.trim().length() == 0) {
@@ -53,16 +58,16 @@ public class NewActivity extends AnAction {
         try {
             packageName = readPackageName();
             String s = new String(packageName).replace(".", "/");
-            String basePath = project.getBasePath() + "/app/src/main/java/" + s;
-            File baseActivity = new File(basePath + "/BaseActivity.java");
+            String baseActvityPath = project.getBasePath() + "/app/src/main/java/" + s;
+            File baseActivity = new File(baseActvityPath + "/BaseActivity.java");
 
             if (!baseActivity.exists()) {
                 /**
                  * 创建基类
                  */
-                creatFile("Base", "BaseActivity.txt", basePath, "");
-                creatFile("Base", "BasePresenter.txt", basePath, "");
-                creatFile("Base", "ProjectApplication.txt", basePath, "");
+                creatFile("Base", "BaseActivity.txt", baseActvityPath, "");
+                creatFile("Base", "BasePresenter.txt", baseActvityPath, "");
+                creatFile("Base", "ProjectApplication.txt", baseActvityPath, "");
                 /**
                  * 写入Manfast ProjectApplication
                  */
@@ -92,7 +97,11 @@ public class NewActivity extends AnAction {
 /**
  * 写入Manfast
  */
-            manifast(null, "." + smallname + "." + bigname + "Activity");
+            String ss = basePath.replace("/", ".");
+            int i = ss.indexOf(packageName);
+            String extendname = basePath.substring(i + packageName.length()).replace("/", ".");
+
+            manifast(null, extendname + "." + smallname + "." + bigname + "Activity");
         } catch (Exception ex) {
             Messages.showInfoMessage(project, ex.toString(), "错误提示");
         }
@@ -108,6 +117,9 @@ public class NewActivity extends AnAction {
      * @param toPath
      */
     private void creatFile(String activity, String s, String toPath, String firstName) {
+        String ss = toPath.replace("/", ".");
+        int start = ss.indexOf(packageName);
+        String extendname = toPath.substring(start + packageName.length()).replace("/", ".");
         String content = "";
         content = readFile("/" + activity + "/" + s);
         content = content.replace("$packagename", packageName);
@@ -115,6 +127,7 @@ public class NewActivity extends AnAction {
         content = content.replace("$smallname", smallname);
         content = content.replace("$name", bigname);
         content = content.replace("$author", userName);
+        content = content.replace("$extendname", extendname);
         writetoFile(content, toPath, firstName + s.replace("txt", "java"));
     }
 
