@@ -36,18 +36,16 @@ public class NewActivity extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+
         // TODO: insert action logic here
         Map<String, String> map = System.getenv();
         userName = map.get("USERNAME");// 获取用户名
 
         project = e.getData(PlatformDataKeys.PROJECT);
-
         String name = Messages.showInputDialog(project, "起个名字，一定要吊炸天的名字！", "先想个名字",
                 Messages.getQuestionIcon());
         if (name == null || name.trim().length() == 0) {
-            Messages.showInfoMessage(project, "不能为空哦！！", "提示");
-            name = Messages.showInputDialog(project, "起个名字，一定要吊炸天的名字！", "先想个名字",
-                    Messages.getQuestionIcon());
+            Messages.showInfoMessage(project, "好像啥也没填！！", "提示");
             return;
         }
         smallname = toUpperOrNot(name, false);
