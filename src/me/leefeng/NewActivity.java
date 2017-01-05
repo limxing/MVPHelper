@@ -5,8 +5,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import groovy.util.logging.Log;
-import groovy.util.logging.Log4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -43,6 +41,7 @@ public class NewActivity extends AnAction {
         userName = map.get("USERNAME");// 获取用户名
 
         project = e.getData(PlatformDataKeys.PROJECT);
+
         String name = Messages.showInputDialog(project, "起个名字，一定要吊炸天的名字！", "先想个名字",
                 Messages.getQuestionIcon());
         if (name == null || name.trim().length() == 0) {
@@ -60,23 +59,6 @@ public class NewActivity extends AnAction {
             File baseActivity = new File(basePath + "/BaseActivity.java");
 
             if (!baseActivity.exists()) {
-//                File[] baseFiles = new File(this.getClass().getResource("/Base").getFile()).listFiles();
-//                for (File file : baseFiles) {
-//                    InputStream inputStream;
-//                    String content = "";
-//                    try {
-//                        inputStream = new FileInputStream(file);
-//                        content = new String(readStream(inputStream));
-//                    } catch (FileNotFoundException e1) {
-//                        e1.printStackTrace();
-//                    } catch (Exception e1) {
-//                        e1.printStackTrace();
-//                    }
-//                    content = content.replace("$packagename", packageName);
-//                    content = content.replace("$date", getNowDateShort());
-//                    content = content.replace("$author", userName);
-//                    writetoFile(content, basePath, file.getName().replace("txt", "java"));
-//                }
                 /**
                  * 创建基类
                  */
