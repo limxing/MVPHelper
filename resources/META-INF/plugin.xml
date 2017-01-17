@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>me.leefeng.mvphelper</id>
     <name>LeefengMVPHelper</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <vendor email="leefengme@163.com" url="http://www.leefeng.me">Leefeng.Me</vendor>
 
     <description><![CDATA[
