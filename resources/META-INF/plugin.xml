@@ -5,13 +5,13 @@
     <vendor email="leefengme@163.com" url="http://www.leefeng.me">Leefeng.Me</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+     Used by Android developer ,can be product by one key with BaseActivity BasePresenter ProjectApplication and so on.<br>
+      <em></em>
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      <br>
+      <em></em>
     ]]>
     </change-notes>
 
